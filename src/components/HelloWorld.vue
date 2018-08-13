@@ -1,7 +1,8 @@
 <template>
   <div class="hello">
-    hello
-    <button @click="sendRequest">click me</button>
+    <input type="phone" class="input-box" v-model="value">
+    <button @click="sendRequest" class="submit-btn">click me</button>
+    <button @click="sendRequest1" class="submit-btn">click me</button>
   </div>
 </template>
 
@@ -10,19 +11,25 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
+      value: ''
     }
   },
   methods: {
     sendRequest () {
-      setTimeout(() => {
-        this.$axios.post('/api/saveInfo', {
-          data: 'hello',
-          title: 'zy'
-        }).then(res => {
-        }).catch(error => {
+        this.$post('/api/saveInfo', {
+          value: this.value,
+          requestName: 'name01'
+        }, '请求失败啦~~~').then(res => {
+          // alert(res.data)
         })
-      }, 200)
-      
+    },
+    sendRequest1 () {
+        this.$get('/api/saveInfo', {
+          value: this.value,
+          requestName: 'name02'
+        }, '请求失败啦~~~').then(res => {
+          // alert(res.data)
+        })
     }
   }
 }
@@ -43,5 +50,12 @@ li {
 }
 a {
   color: #42b983;
+}
+.input-box {
+  border: 1px solid #ccc;
+}
+.submit-btn {
+  background: #f00;
+  color: #fff;
 }
 </style>
