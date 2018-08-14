@@ -14,13 +14,12 @@ axios.interceptors.request.use(config => {
     let requestName = config.data.requestName
     if (requestName) {
         if (axios[requestName] && axios[requestName].cancel) {
-            console.log(axios[requestName])
-            console.log(axios[requestName].cancel)
             axios[requestName].cancel()
         }
         config.cancelToken = new CancelToken (c => {
             axios[requestName] = {}
             axios[requestName].cancel = c
+           
         })
     }
     return config

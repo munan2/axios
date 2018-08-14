@@ -3,11 +3,9 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import {Indicator} from 'mint-ui'
 import axios from '../utils/axios.js'
 import {post, get} from '../utils/http.js'
 Vue.config.productionTip = false
-Vue.component(Indicator)
 Vue.prototype.$axios = axios
 Vue.prototype.$post = post
 Vue.prototype.$get = get
