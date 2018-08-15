@@ -28,11 +28,9 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(config => {
-    cancelFlag = true
     Indicator.close()
     return config
 }, error => {
-    cancelFlag = true
     Indicator.close()
     if (error && error.response) {
         switch (error.response.status) {
