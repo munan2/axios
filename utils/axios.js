@@ -5,21 +5,30 @@ import {Indicator} from 'mint-ui'
 Vue.component(Indicator)
 let CancelToken = axios.CancelToken //取消请求
 let cancelFlag = true
-//设置默认请求头
-axios.defaults.headers = {
-    'X-Requested-With': 'XMLHttpRequest'
-}
-axios.defaults.timeout = 20000
+axios.defaults.withCredentials = true
+// axios.defaults.baseURL = "https://easy-mock.com/mock/5b7bc3d450a6182006a1986e"
 axios.interceptors.request.use(config => {
-    let requestName = config.data.requestName
-    if (requestName) {
-        if (axios[requestName] && axios[requestName].cancel) {
-            axios[requestName].cancel()
+    //设置默认请求头
+    config.headers['X-Requested-With'] = 'XMLHttpRequest'
+    config.timeout = 20000 // 超时设置
+    let cancelGroupName
+    if (config.method === 'post') {
+        if (config.data && config.data.cancelGroupName) { // post请求ajax取消函数配置
+            cancelGroupName = config.data.cancelGroupName
         }
-        config.cancelToken = new CancelToken (c => {
-            axios[requestName] = {}
-            axios[requestName].cancel = c
-           
+        // config.data = qs.stringify(config.data)
+    } else {
+        if (config.params && config.params.cancelGroupName) { // get请求ajax取消函数配置
+            cancelGroupName = config.params.cancelGroupName
+        }
+    }
+    if (cancelGroupName) {
+        if (axios[cancelGroupName] && axios[cancelGroupName].cancel) {
+            axios[cancelGroupName].cancel()
+        }
+        config.cancelToken = new CancelToken(c => {
+            axios[cancelGroupName] = {}
+            axios[cancelGroupName].cancel = c
         })
     }
     return config
